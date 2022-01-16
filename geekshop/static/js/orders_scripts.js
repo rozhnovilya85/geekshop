@@ -57,14 +57,16 @@ window.onload = function () {
     }
 
 
-    $('.order_form select').change(function () {
+    // $('.order_form select').change(function () {
+    $('.order_form').on('change', 'select', function () {
+        console.log('Работает')
         var target = event.target;
         orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-product', ''));
         var orderitem_product_pk = target.options[target.selectedIndex].value;
 
         if (orderitem_product_pk) {
             $.ajax({
-                url: "/order/product/" + orderitem_product_pk + "/price/",
+                url: "/orders/product/" + orderitem_product_pk + "/price/",
                 success: function (data) {
                     if (data.price) {
                         price_arr[orderitem_num] = parseFloat(data.price);

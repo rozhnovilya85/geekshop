@@ -8,8 +8,10 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 from django.db.models.signals import pre_save, pre_delete
 from basketapp.models import Basket
+from mainapp.models import Product
 from ordersapp.forms import OrderItemForm
 from ordersapp.models import Order, OrderItem
+from django.http import JsonResponse
 
 
 class OrderListView(ListView):
@@ -128,3 +130,12 @@ def product_quantity_update_on_save(sender, update_fields, instance, **kwargs):
 def product_quantity_update_on_delete(sender, instance, **kwargs):
     instance.product.quantity += instance.quantity
     instance.product.save()
+
+def get_product_price(request, pk):
+    product_price = 0.0
+    product = Product.objects.filter(pk=pk, is_active=True).first()
+    if product:
+        product_price = product.price
+
+    return JsonResponse({'price': product_price})
+
