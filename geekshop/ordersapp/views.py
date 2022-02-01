@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
@@ -5,6 +6,7 @@ from django.shortcuts import render
 from django.dispatch import receiver
 # Create your views here.
 from django.urls import reverse_lazy, reverse
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 from django.db.models.signals import pre_save, pre_delete
 from basketapp.models import Basket
@@ -20,6 +22,10 @@ class OrderListView(ListView):
 
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
+
+    @method_decorator(login_required())
+    def dispatch(self, *args, **kwargs):
+        return super(ListView, self).dispatch(*args, **kwargs)
 
 class CreateListView(CreateView):
     template_name = 'ordersapp/order_form.html'
@@ -79,7 +85,9 @@ class UpdateListView(UpdateView):
             formset = OrderFormSet(self.request.POST, instance=self.object)
 
         else:
-            formset = OrderFormSet(instance=self.object)
+            queryset = self.object.orderitems.select_related()
+            formset = OrderFormSet(instance=self.object, queryset=queryset)
+            # formset = OrderFormSet(instance=self.object)
             for form in formset.forms:
                 if form.instance.pk:
                     form.initial['price'] = form.instance.product.price
