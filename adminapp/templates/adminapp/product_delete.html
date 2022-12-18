@@ -1,0 +1,10 @@
+{% extends 'adminapp/base.html' %}
+
+{% block content %}
+<p>Уверенны что хотите удалить товар {{ object.name }}</p>
+    <form method="post">
+    {% csrf_token %}
+        <input type="submit" value="Уверен"/>
+    </form>
+    <a href="{% url 'adminapp:users' %}" class="btn btn-primary">Передумал</a>
+{% endblock %}

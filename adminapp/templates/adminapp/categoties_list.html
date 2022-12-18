@@ -1,0 +1,20 @@
+{% extends 'adminapp/base.html' %}
+
+{% block content %}
+    <div class="categories_list">
+        <a href="{% url 'adminapp:category_create' %}"class="btn btn-primary">Добавить категорию</a>
+
+        {% for item in object_list %}
+
+            <div class="category_record"{% if not item.is_active %} style="opacity: 0.5" {% endif %}>
+            <div class="category_name">{{ item.name }}</div>
+            <div class="category_actions">
+                <a class="btn btn-info" style="margin-bottom: 5px" href="{% url 'adminapp:category_update' item.pk %}">Изменить</a>
+                <a class="btn btn-info" style="margin-bottom: 5px" href="{% url 'adminapp:category_delete' item.pk %}">Удалить</a>
+                <a class="btn btn-info" style="margin-bottom: 5px" href="{% url 'adminapp:products' item.pk %}">Продукты</a>
+            </div>
+            <div class="category_desc">{{ item.description }}</div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

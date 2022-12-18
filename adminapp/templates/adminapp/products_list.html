@@ -1,0 +1,25 @@
+{% extends 'adminapp/base.html' %}
+{% load my_tags %}
+{% block content %}
+    <div class="products_list">
+    <a href="{% url 'adminapp:product_create' category.pk %}"class="btn btn-primary">Добавить товар</a>
+        {% for item in object_list %}
+            <div class="product_record" {% if not item.is_active %} style="opacity: 0.5" {% endif %}>
+{#            <div class="product_name">{{ item.name }}</div>#}
+                <img src="{{ item.image | media_for_products }}"/>
+            <div class="product_actions">
+                <a class="btn btn-info" style="margin-bottom: 5px" href="{% url 'adminapp:product_update' item.pk %}">Изменить</a>
+                <a class="btn btn-info" style="margin-bottom: 5px" href="{% url 'adminapp:product_delete' item.pk %}">Удалить</a>
+                <a class="btn btn-info" style="margin-bottom: 5px" href="{% url 'adminapp:product_read' item.pk %}">Продукты</a>
+            </div>
+            <div class="summary">
+                Цена: {{ item.price }} руб
+                Количество: {{ item.quantity }} шт
+            </div>
+            <div class="product_desc">
+                {{ item.description }}
+            </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'authapp/base.html' %}
+{% load static %}
+
+
+{% block content %}
+  {% if user.is_authenticated %}
+      <h1>Все удалось!</h1>
+      <p>Поздравляем с успешной регистрацией!</p>
+  {% else %}
+      <h1>Все плохо!</h1>
+      <p>Ошибка регистрации!</p>
+  {% endif %}
+    <a class="btn btn-primary from-control" href="{% url 'index' %}">На главную</a>
+
+{% endblock %}
